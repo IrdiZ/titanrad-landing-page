@@ -1,0 +1,410 @@
+@import "tailwindcss";
+
+@theme {
+  --color-stone-black: #0C0A09;
+  --color-warm-charcoal: #1C1917;
+  --color-card-dark: #292524;
+  --color-acid-lime: #D4F268;
+  --color-acid-lime-dark: #bdd85c;
+  --color-off-white: #E7E5E4;
+  --color-border-subtle: rgba(255, 255, 255, 0.1);
+
+  --font-serif: "Newsreader", Georgia, serif;
+  --font-sans: "Instrument Sans", system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Code", monospace;
+}
+
+/* ═══════════════════════════════════════════
+   BASE LAYER
+   ═══════════════════════════════════════════ */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    font-size: 18px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    background: #0C0A09;
+    color: #E7E5E4;
+    overflow-x: hidden;
+  }
+
+
+  ::selection {
+    background-color: rgba(212, 242, 104, 0.35);
+    color: #0C0A09;
+  }
+
+  *:focus-visible {
+    outline: 2px solid #D4F268;
+    outline-offset: 2px;
+  }
+}
+
+/* ═══════════════════════════════════════════
+   HIDE DEFAULT CURSOR (desktop only)
+   ═══════════════════════════════════════════ */
+@media (pointer: fine) {
+  *, *::before, *::after {
+    cursor: none !important;
+  }
+}
+
+/* ═══════════════════════════════════════════
+   NOISE OVERLAY
+   ═══════════════════════════════════════════ */
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+}
+
+/* ═══════════════════════════════════════════
+   SERRATED EDGE DIVIDERS
+   ═══════════════════════════════════════════ */
+.serrated-top {
+  mask-image: radial-gradient(circle at 10px 0, transparent 0, transparent 5px, black 5px);
+  -webkit-mask-image: radial-gradient(circle at 10px 0, transparent 0, transparent 5px, black 5px);
+  mask-size: 20px 10px;
+  -webkit-mask-size: 20px 10px;
+  mask-repeat: repeat-x;
+  -webkit-mask-repeat: repeat-x;
+  mask-position: top;
+  -webkit-mask-position: top;
+}
+
+.serrated-bottom {
+  mask-image: radial-gradient(circle at 10px 10px, transparent 0, transparent 5px, black 5px);
+  -webkit-mask-image: radial-gradient(circle at 10px 10px, transparent 0, transparent 5px, black 5px);
+  mask-size: 20px 10px;
+  -webkit-mask-size: 20px 10px;
+  mask-repeat: repeat-x;
+  -webkit-mask-repeat: repeat-x;
+  mask-position: bottom;
+  -webkit-mask-position: bottom;
+}
+
+/* ═══════════════════════════════════════════
+   GRID PATTERN
+   ═══════════════════════════════════════════ */
+.grid-pattern {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* ═══════════════════════════════════════════
+   CATALOG LABEL
+   ═══════════════════════════════════════════ */
+.catalog-label {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+
+/* ═══════════════════════════════════════════
+   CUSTOM SCROLLBAR
+   ═══════════════════════════════════════════ */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0C0A09;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #D4F268 0%, #292524 100%);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #D4F268 0%, #44403C 100%);
+}
+
+/* ═══════════════════════════════════════════
+   TEXT SHIMMER — Animated gradient text
+   ═══════════════════════════════════════════ */
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.text-shimmer {
+  background: linear-gradient(
+    90deg,
+    #D4F268 0%,
+    #e8f5a3 25%,
+    #a8e063 50%,
+    #e8f5a3 75%,
+    #D4F268 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 4s linear infinite;
+}
+
+/* ═══════════════════════════════════════════
+   GLOW PULSE — Cards and elements
+   ═══════════════════════════════════════════ */
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(212, 242, 104, 0.08), 0 0 60px rgba(212, 242, 104, 0.04); }
+  50% { box-shadow: 0 0 30px rgba(212, 242, 104, 0.18), 0 0 80px rgba(212, 242, 104, 0.08); }
+}
+
+.glow-pulse {
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+
+/* ═══════════════════════════════════════════
+   MORPHING BLOB — Background accent
+   ═══════════════════════════════════════════ */
+@keyframes morph {
+  0%, 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+  25% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+  50% { border-radius: 50% 60% 30% 60% / 30% 50% 70% 50%; }
+  75% { border-radius: 60% 30% 60% 40% / 70% 40% 50% 60%; }
+}
+
+.morphing-blob {
+  animation: morph 12s ease-in-out infinite;
+}
+
+/* ═══════════════════════════════════════════
+   FLOATING ANIMATION
+   ═══════════════════════════════════════════ */
+@keyframes float-gentle {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33% { transform: translateY(-8px) rotate(0.5deg); }
+  66% { transform: translateY(4px) rotate(-0.5deg); }
+}
+
+.float-gentle {
+  animation: float-gentle 6s ease-in-out infinite;
+}
+
+/* ═══════════════════════════════════════════
+   MARQUEE — Infinite scroll
+   ═══════════════════════════════════════════ */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.marquee-track {
+  animation: marquee 35s linear infinite;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* ═══════════════════════════════════════════
+   SCAN LINE — For hero mockup
+   ═══════════════════════════════════════════ */
+@keyframes scan-line {
+  0% { top: 0%; opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+.scan-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(212, 242, 104, 0.4), transparent);
+  animation: scan-line 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════
+   ANIMATED UNDERLINE — Nav & footer links
+   ═══════════════════════════════════════════ */
+.animated-underline {
+  position: relative;
+}
+
+.animated-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1.5px;
+  background: linear-gradient(90deg, #D4F268, #a8e063);
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animated-underline:hover::after {
+  width: 100%;
+}
+
+/* ═══════════════════════════════════════════
+   GRADIENT BORDER — Rotating border effect
+   ═══════════════════════════════════════════ */
+@property --border-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes border-rotate {
+  to { --border-angle: 360deg; }
+}
+
+.gradient-border {
+  --border-angle: 0deg;
+  border: 2px solid transparent;
+  background-image:
+    linear-gradient(#1C1917, #1C1917),
+    conic-gradient(from var(--border-angle), #D4F268, transparent 30%, transparent 70%, #D4F268);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  animation: border-rotate 4s linear infinite;
+}
+
+/* ═══════════════════════════════════════════
+   BREATHING CTA — Subtle scale pulse
+   ═══════════════════════════════════════════ */
+@keyframes breathe {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(212, 242, 104, 0.3); }
+  50% { transform: scale(1.01); box-shadow: 0 0 20px 4px rgba(212, 242, 104, 0.15); }
+}
+
+.breathe {
+  animation: breathe 3s ease-in-out infinite;
+}
+
+/* ═══════════════════════════════════════════
+   SCROLL INDICATOR
+   ═══════════════════════════════════════════ */
+@keyframes scroll-bounce {
+  0%, 100% { transform: translateY(0); opacity: 1; }
+  50% { transform: translateY(8px); opacity: 0.3; }
+}
+
+/* ═══════════════════════════════════════════
+   STAGGER FADE UTILITY
+   ═══════════════════════════════════════════ */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ═══════════════════════════════════════════
+   HOVER GLOW — Interactive card glow
+   ═══════════════════════════════════════════ */
+.hover-glow {
+  transition: box-shadow 0.4s ease, border-color 0.4s ease;
+}
+
+.hover-glow:hover {
+  box-shadow:
+    0 0 20px rgba(212, 242, 104, 0.08),
+    0 0 60px rgba(212, 242, 104, 0.04),
+    0 4px 30px rgba(0, 0, 0, 0.3);
+  border-color: rgba(212, 242, 104, 0.2);
+}
+
+/* ═══════════════════════════════════════════
+   LOADER PULSE — Page loader logo
+   ═══════════════════════════════════════════ */
+@keyframes loader-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.15); opacity: 1; }
+}
+
+@keyframes loader-ring {
+  0% { transform: scale(0.8); opacity: 0; }
+  50% { transform: scale(1); opacity: 0.3; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+
+/* ═══════════════════════════════════════════
+   RIPPLE EFFECT
+   ═══════════════════════════════════════════ */
+@keyframes ripple-ring {
+  0% { transform: scale(0); opacity: 0.6; }
+  100% { transform: scale(3); opacity: 0; }
+}
+
+/* ═══════════════════════════════════════════
+   PERSPECTIVE UTILITIES
+   ═══════════════════════════════════════════ */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+/* ═══════════════════════════════════════════
+   HERO GRID — Subtle dot grid background
+   ═══════════════════════════════════════════ */
+.dot-grid {
+  background-image: radial-gradient(circle, rgba(212, 242, 104, 0.06) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* ═══════════════════════════════════════════
+   BUTTON SHINE — Moving highlight
+   ═══════════════════════════════════════════ */
+@keyframes button-shine {
+  0% { left: -100%; }
+  50%, 100% { left: 100%; }
+}
+
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-shine::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  animation: button-shine 3s ease-in-out infinite;
+}
+
+/* ═══════════════════════════════════════════
+   TYPING CURSOR — For text effects
+   ═══════════════════════════════════════════ */
+@keyframes blink-cursor {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.typing-cursor::after {
+  content: '|';
+  color: #D4F268;
+  animation: blink-cursor 1s step-end infinite;
+  margin-left: 2px;
+}
